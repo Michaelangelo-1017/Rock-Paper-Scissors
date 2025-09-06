@@ -1,3 +1,14 @@
+//Variables
+const buttons = document.querySelectorAll(".choices > button");
+let humanScore = 0;
+let computerScore = 0;
+const humanScoreText = document.getElementById("human-score");
+const computerScoreText = document.getElementById("computer-score");
+const resultsText = document.getElementById("results-text");
+const results = document.querySelector(".results");
+const choicesContainer = document.querySelector(".choices");
+
+//Functions
 function getComputerChoice(){
     const gameArray = ["rock","paper","scissors"];
     const choice = Math.floor(Math.random() * (3 - 0)) + 0;
@@ -9,112 +20,99 @@ const getHumanChoice = () =>{
     return choice;
 }
 
-let humanScore = 0;
-let computerScore = 0;
-
 function playRound(humanChoice,computerChoice){
     humanChoice = humanChoice.toLowerCase();
     if(humanChoice === computerChoice){
-        console.log("That's a tie! You both get a point.");
-        computerScore++;
-        humanScore++;
+        humanScoreText.textContent = humanScore;
+        computerScoreText.textContent = computerScore;
+        results.innerHTML += "<p class='result'>That's a tie! No one gets a point.</p>";
         return
     }
     if(humanChoice === "rock"){
         if(computerChoice === "paper"){
-        console.log("You lose! Paper beats Rock");
         computerScore++;
+        computerScoreText.textContent = computerScore;
+        results.innerHTML += "<p class='result lose'>You lose! Paper beats Rock</p>";
+        gameWinner();
         return
         }
     else if(computerChoice === "scissors"){
-        console.log("You win! Rock beats Scissors");
         humanScore++;
+        humanScoreText.textContent = humanScore;
+        results.innerHTML += "<p class='result win'>You win! Rock beats Scissors</p>";
+        gameWinner();
         return
         }
     }
     if(humanChoice === "paper"){
         if(computerChoice === "scissors"){
-        console.log("You lose! Scissors beats paper");
         computerScore++;
+        computerScoreText.textContent = computerScore;
+        results.innerHTML += "<p class='result lose'>You lose! Scissors beats paper</p>";
+        gameWinner();
         return
         }
     else if(computerChoice === "rock"){
-        console.log("You win! Paper beats rock");
         humanScore++;
+        humanScoreText.textContent = humanScore;
+        results.innerHTML += "<p class='result win'>You win! Paper beats rock</p>";
+        gameWinner();
         return
         }
     }
     if(humanChoice === "scissors"){
         if(computerChoice === "rock"){
-        console.log("You lose! Rock beats Scissors");
         computerScore++;
+        computerScoreText.textContent = computerScore;
+        results.innerHTML += "<p class='result lose'>You lose! Rock beats Scissors</p>";
+        gameWinner();
         return
         }
     else if(computerChoice === "paper"){
-        console.log("You win! Scissors beats Paper");
         humanScore++;
+        humanScoreText.textContent = humanScore;
+        results.innerHTML += "<p class='result win'>You win! Scissors beats Paper</p>";
+        gameWinner();
         return
         }
     }
-    
 }
 
-function playGame(){
-    let humanScore = 0;
-        let computerScore = 0;
-
-        function playRound(humanChoice,computerChoice){
-            humanChoice = humanChoice.toLowerCase();
-            if(humanChoice === computerChoice){
-                console.log("That's a tie! You both get a point.");
-                computerScore++;
-                humanScore++;
-                return
-            }
-            if(humanChoice === "rock"){
-                if(computerChoice === "paper"){
-                console.log("You lose! Paper beats Rock");
-                computerScore++;
-                return
-                }
-            else if(computerChoice === "scissors"){
-                console.log("You win! Rock beats Scissors");
-                humanScore++;
-                return
-                }
-            }
-            if(humanChoice === "paper"){
-                if(computerChoice === "scissors"){
-                console.log("You lose! Scissors beats paper");
-                computerScore++;
-                return
-                }
-            else if(computerChoice === "rock"){
-                console.log("You win! Paper beats rock");
-                humanScore++;
-                return
-                }
-            }
-            if(humanChoice === "scissors"){
-                if(computerChoice === "rock"){
-                console.log("You lose! Rock beats Scissors");
-                computerScore++;
-                return
-                }
-            else if(computerChoice === "paper"){
-                console.log("You win! Scissors beats Paper");
-                humanScore++;
-                return
-                }
-            }
-            
-        }
-    while(computerScore < 5 && humanScore < 5){
-        const computerChoice = getComputerChoice();
-        const humanChoice = getHumanChoice();
-        playRound(humanChoice,computerChoice);
-        console.log(`The score now is Computer ${computerScore} - ${humanScore} Human`)
+function gameWinner(){
+    if(humanScore === 5 || computerScore === 5){
+        results.innerHTML += `<p class='game-over'>Game Over!</p>`;
+        choicesContainer.classList.toggle("hidden");
+    }
+    if(humanScore === 5){
+        results.innerHTML += `<p class="winner-text win">Human Won!</p>
+        <p class='game-over'>Restart Game?</p>
+        <button type='button' id="restart-btn" onclick="restartGame()">Restart</button>`
+    }
+    else if(computerScore === 5){
+        results.innerHTML += `<p class="winner-text lose">Computer Won!</p>
+        <p class='game-over'>Restart Game?</p>
+        <button type='button' id="restart-btn" onclick="restartGame()">Restart</button>`
     }
 }
-console.log(playGame());
-;
+
+function restartGame(){
+    humanScore = 0;
+    computerScore = 0;
+    computerScoreText.textContent = computerScore;
+    humanScoreText.textContent = humanScore;
+    choicesContainer.classList.toggle("hidden");
+    results.innerHTML = `<p id="results-text">Results</p>`
+}
+
+//Event Listeners
+buttons.forEach((button)=>{
+    button.addEventListener("click", ()=>{
+        const humanChoice = button.id;
+        const computerChoice = getComputerChoice();
+        gameWinner();
+        playRound(humanChoice, computerChoice);
+    })
+})
+
+
+//Testing Block
