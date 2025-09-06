@@ -11,8 +11,33 @@ const computerImg = document.querySelector(".computer-container > .image > img")
 const humanImg = document.querySelector(".human-container > .image > img");
 const computerImgContainer = document.querySelector(".computer-container > .image");
 const humanImgContainer = document.querySelector(".human-container > .image");
+const namesToChange = document.querySelectorAll(".player-name");
 
 //Functions
+function getUserName(){
+    let isValid = true;
+    const nameRegex = /^[a-zA-Z\s]{1,}$/;
+    let userName = "";
+    while(isValid){
+        userName = prompt("Enter your name new challenger!");
+        if(nameRegex.test(userName)){
+            isValid = false;
+        }
+    }
+    return userName;
+}
+
+const playerName = getUserName();
+
+function usePlayerName(name){
+    namesToChange.forEach((element)=>{
+        element.textContent = name;
+    })
+    return
+}
+
+usePlayerName(playerName);
+
 function getComputerChoice(){
     const gameArray = ["rock","paper","scissors"];
     const choice = Math.floor(Math.random() * (3 - 0)) + 0;
@@ -90,7 +115,7 @@ function gameWinner(){
         choicesContainer.classList.toggle("hidden");
     }
     if(humanScore === 5){
-        results.innerHTML += `<p class="winner-text win">Human Won!</p>
+        results.innerHTML += `<p class="winner-text win">${playerName} Won!</p>
         <p class='game-over'>Restart Game?</p>
         <button type='button' id="restart-btn" onclick="restartGame()">Restart</button>`
     }
