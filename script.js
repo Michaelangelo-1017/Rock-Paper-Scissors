@@ -7,11 +7,17 @@ const computerScoreText = document.getElementById("computer-score");
 const resultsText = document.getElementById("results-text");
 const results = document.querySelector(".results");
 const choicesContainer = document.querySelector(".choices");
+const computerImg = document.querySelector(".computer-container > .image > img");
+const humanImg = document.querySelector(".human-container > .image > img");
+const computerImgContainer = document.querySelector(".computer-container > .image");
+const humanImgContainer = document.querySelector(".human-container > .image");
 
 //Functions
 function getComputerChoice(){
     const gameArray = ["rock","paper","scissors"];
     const choice = Math.floor(Math.random() * (3 - 0)) + 0;
+    computerImg.src = `images/${gameArray[choice]}.jpg`
+    computerImg.alt = `A picture of ${gameArray[choice]}`
     return gameArray[choice];
 }
 
@@ -101,15 +107,21 @@ function restartGame(){
     computerScoreText.textContent = computerScore;
     humanScoreText.textContent = humanScore;
     choicesContainer.classList.toggle("hidden");
-    results.innerHTML = `<p id="results-text">Results</p>`
+    results.innerHTML = `<p id="results-text">Results</p>`;
+    humanImgContainer.classList.add("hidden");
+    computerImgContainer.classList.add("hidden");
 }
 
 //Event Listeners
 buttons.forEach((button)=>{
     button.addEventListener("click", ()=>{
         const humanChoice = button.id;
+        humanImg.src = `images/${button.id}.jpg`
+        humanImg.alt = `A picture of ${button.id}`
         const computerChoice = getComputerChoice();
         gameWinner();
+        humanImgContainer.classList.remove("hidden");
+        computerImgContainer.classList.remove("hidden");
         playRound(humanChoice, computerChoice);
     })
 })
